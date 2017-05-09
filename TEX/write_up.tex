@@ -1,0 +1,357 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%% ICML 2013 EXAMPLE LATEX SUBMISSION FILE %%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Use the following line _only_ if you're still using LaTeX 2.09.
+%\documentstyle[icml2013,epsf,natbib]{article}
+% If you rely on Latex2e packages, like most moden people use this:
+\documentclass{article}
+
+% For figures
+\usepackage{graphicx} % more modern
+%\usepackage{epsfig} % less modern
+\usepackage{subfigure} 
+
+% For citations
+\usepackage{natbib}
+
+% For algorithms
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{amsmath}
+
+% As of 2011, we use the hyperref package to produce hyperlinks in the
+% resulting PDF.  If this breaks your system, please commend out the
+% following usepackage line and replace \usepackage{icml2013} with
+% \usepackage[nohyperref]{icml2013} above.
+\usepackage{hyperref}
+
+% Packages hyperref and algorithmic misbehave sometimes.  We can fix
+% this with the following command.
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+% Employ the following version of the ``usepackage'' statement for
+% submitting the draft version of the paper for review.  This will set
+% the note in the first column to ``Under review.  Do not distribute.''
+%%\usepackage{icml2013} 
+% Employ this version of the ``usepackage'' statement after the paper has
+% been accepted, when creating the final version.  This will set the
+% note in the first column to ``Proceedings of the...''
+\usepackage[accepted]{icml2013}
+
+
+% The \icmltitle you define below is probably too long as a header.
+% Therefore, a short form for the running title is supplied here:
+\icmltitlerunning{Classification Methods on Kaggle Titanic Data Set}
+
+\begin{document} 
+
+\twocolumn[
+\icmltitle{Classification Methods on Kaggle Titanic Data Set}
+
+% It is OKAY to include author information, even for blind
+% submissions: the style file will automatically remove it for you
+% unless you've provided the [accepted] option to the icml2013
+% package.
+\icmlauthor{Daniel Mukasa}{}
+%\icmladdress{Your Fantastic Institute,
+            %314159 Pi St., Palo Alto, CA 94306 USA}
+\icmlauthor{Ian Hunt-Issak}{}
+\icmlauthor{Hillary Pan}{}
+%\icmladdress{Their Fantastic Institute,
+            %27182 Exp St., Toronto, ON M6H 2T1 CANADA}
+
+% You may provide any keywords that you 
+% find helpful for describing your paper; these are used to populate 
+% the "keywords" metadata in the PDF but will not be shown in the document
+%\icmlkeywords{boring formatting information, machine learning, ICML}
+
+\vskip 0.3in
+]
+
+\begin{abstract} 
+Well put our abstract here, however we plan to do that should involve some collaboration. The following sections will essentially be what is written on the instructions for the project
+\end{abstract} 
+
+\section{Introduction and Background}
+\label{intro}
+
+%Well introduce the titanic problem here, what Kaggle is and why this problem has been posted. (we should say something cheesy like the competition is an attempt to push the boundaries of classification algorithms in ML).
+
+Kaggle is an online data science website devoted to the development of data science and machine learning methods. In order to stimulate this development, the Kaggle community has created a series of challenges for users to to tackle. These challenges are then accompanied by larger real world data science problems that are posted by companies such as Google, Amazon and Netflix. 
+
+The purpose of the introductory challenges is to have users who have just completed a first course in machine learning implement what they know on this classification task. While the introductory problems alone do not solve many pertinent problems in the world around us, they set users up to handle more complex questions that machine learning can be used for. There is thus an overarching goal of showing deep trends that may only be seen with machine learning methods, and give users an understanding of the power of machine learning.
+
+The Titanic disaster challenge is the first in this series of challenges posted on Kaggle. This dataset provides information of various passengers on the RMS Titanic and asks users to predict which passengers would have survived this disaster. This data set contain essential features such as gender, age, passenger class and more that are described in the experiments and results section. As one may expect, however, this data is filled with missing information, as not all information on any given passenger could be recorded.
+
+Such a classification task may easily be assessed via the Naive Bayes algorithm, Logistic regression, or Gaussian Process Classification, as all of these methods may be easily used for binary classification, and elegantly handle cases of missing data.
+%I know that Naive Bayes handles missing data, but i'm not certain that the other two methods do, we should check this with Colin or the readings.
+We have thus implemented these models and compared there effectiveness of predicting which passengers would have survived this fateful day. 
+
+
+
+
+\section{Models and Method} 
+
+We have implemented three separate models on the Kaggle Titanic challenge data set in hopes of predicting who survived this disaster. 
+%write more stuff here?
+ 
+\subsection{Naive Bayes}
+
+The Naive Bayes is one of the most simplistic, yet surprisingly effective, classification methods in machine learning. This method takes the form of a Bayes classifier, a model that is defined in concordance to Bayes rule. Given a classification c, a dataset of feature vectors $x_1, x_2,..,x_n$ complied vertically into a column vector $X$ where
+
+  \begin{align}
+    X &= \begin{bmatrix}
+           x_{1} \\
+           x_{2} \\
+           \vdots \\
+           x_{m}
+         \end{bmatrix}
+  \end{align}
+  
+and corresponding classes in a column vector $t$, 
+%Ian Hillary help, i wanna make column vectors but I dont know how 
+one defines a Bayes classifier as
+
+\begin{equation} \tiny{P(T_{new}=c|\textbf{x}_{new},\textbf{X},\textbf{t})=\frac{p(\textbf{x}_{new}|T_{new}=c,\textbf{X},\textbf{t})P(T_{new}=c|\textbf{X},\textbf{t})}{ p(\textbf{x}_{new}|T_{new}=c^{'},\textbf{X},\textbf{t})P(T_{new}=c^{'}|\textbf{X},\textbf{t})}}
+\end{equation}
+
+%Jesus Christ for the life of me i cant get this fucking equation to work ._. The equation environment isn't working the equation wont fit and now i'm kinda sad :(
+
+where the terms in the numerator are defined as the class conditional distribution and the class prior respectively, as defined on page 169 of A First Course in Machine Learning.
+%add "A First Course in Machine Learning" by Simon Rogers and Mark Girolami into the bibliography and cit it here
+
+Naive Bayes simplifies the structure of a Bayes classifier by assuming each feature of the class conditional distribution is independent of one another. This simplification thus defined the first term in our numerator of equation 1 as 
+
+\begin{equation}
+    p(\textbf{x}_{n}|t_{n}=c,\textbf{X},\textbf{t})= \prod_{d=1}^D p(x_{nd}|t_{n}=c,\textbf{X},\textbf{t})
+\end{equation}
+
+where $D$ is the number of features in our feature vector. This allows for a very simple and quick calculation of the class conditional distribution, making this method much faster and easier to implement than most other machine learning methods. Along with these appealing features, this algorithm very easily handles missing data by simply assuming it does not occur. This therefore does not help or hurt the model, making this method especially appealing for the Titanic challenge.
+
+The down falls of this method rest mainly in this naive assumption. Due to this assumption any information on the correlation between features is not captured in the model.This is of course extremely unrealistic to assume and is almost never the case. Along with this, this product presents a potential issue for zero counts in the data set. If a state of a feature vector never occurs then this class conditional likelihood will be zero. Therefore, the probability of a feature vector occurring with a feature state that has never been observed in a training set is zero. This however is fairly unlikely and over fits the model to the training set.
+
+Despite these obvious downfalls of this method 
+
+
+This section is for Daniel
+
+
+
+\subsection{Logistic Regression}
+
+Binary logistic regression is another useful method we explored.
+This method measures the relationship between the categorical dependent variable, in this case whether the passenger survived, and the independent variables via the probability model 
+
+\begin{equation}
+{ p(t|{\bf x},{\bf w}) =
+   \left( \frac{1}{1+e^{-{\bf w}^T{\bf x}}} \right)^t
+   \left( \frac{e^{-{\bf w}^T{\bf x}}}{1+e^{-{\bf w}^T{\bf x}}} \right)^{1-t} }
+\end{equation}
+
+where $\textbf{x} = [x_1,..., x_D]^T$ denotes the vector of input features, $\textbf{w} = [w_1,...,w_D]^T$ is the associated vector of model parameters, and $t\in\{0,1\}$ denotes the output.
+
+In order to determine the model parameter $\textbf{w}$, an expression for the likelihood of the training data is necessary. Assuming all data points are i.i.d, the likelihood over the entire training data set can be written as 
+
+\begin{equation}
+p({\bf t}|{\bf X},{\bf w}) = \prod_{n=1}^NP_n^{t_n} (1-P_n)^{1-t_n} 
+\end{equation}
+
+where notation in Eq. (3) is simplified such that
+
+\begin{equation}
+{P_n = \frac{1}{1+e^{-{\bf w}^T{\bf x}_n}} }
+\end{equation}
+
+and ${\bf t}=[t_1,\ldots,t_N]^T$, ${\bf X} = [{\bf x}_1,\ldots,{\bf x}_N]^T$.
+
+\subsubsection{Maximum Likelihood}
+The log likelihood of the training data is 
+
+\begin{equation}
+{ \log L =\sum_{n=1}^N \left( t_n\log P_n+ ({1-t_n})\log(1-P_n) \right) }
+\end{equation}
+
+To maximize the likelihood,
+
+%{\frac{\partial #1}{\partial #2}}
+\begin{equation}
+\frac{\partial L}{\partial \bf w} =\cdots= \sum_{n=1}^N {\bf x}_n(t_n-P_n) = {\bf 0} 
+\end{equation}
+
+However, Eq. 7 cannot be solved analytically and must be solved numerically. We therefore utilize the Newton-Raphson optimization method, in which the Hessian matrix with respect to $\textbf{w}$ is written as 
+
+\begin{equation}
+\frac{\partial^2\log g}{{\partial \bf w}\partial{\bf w}^T} = \cdots =
+     -\frac{1}{\sigma^2}{\bf I}_D -\sum_{n=1}^N {\bf x}_n{\bf x}_n^TP_n(1-P_n)  
+\end{equation}
+
+The solution procedure starts with an initial guess of ${\bf w}$, in this case ${\bf w}={\bf 0}$. Then a loop is started. In each iteration, the gradient of the log likelihood in Eq. 7,
+called residual ${\bf r}$ of the current iteration, is first evaluated, followed by an update to ${\bf w}$ as ${\bf w} = {\bf w} -{\bf H}_{MLE}^{-1}{\bf r}$. Iteration continues until the residual is small enough. The converged solution is the MLE of ${\bf w}$.
+
+\subsubsection{Bayesian}
+
+In the maximum likelihood approach, $\textbf{w}$ is treated as a regular variable. In Bayesian approach, $\textbf{w}$ is treated as a random variable. Using a Gaussian prior on $\textbf{w}$, 
+
+\begin{equation}
+p({\bf w|\sigma^2}) = \mathcal{N}(0,\sigma^2 {\bf I})
+\end{equation}
+
+and the posterior is 
+
+\begin{equation}
+\begin{split}
+p({\bf w}|{\bf t},{\bf X},\sigma^2) & = \frac{p({\bf w}|\sigma^2) p({\bf t}|{\bf X},{\bf w})}{p({\bf t}|{\bf X})} \\
+& :=\frac{g({\bf w};{\bf t},{\bf X},\sigma^2)}{\int g({\bf w};{\bf t},{\bf X},\sigma^2) d{\bf w}} 
+\end{split}
+\end{equation}
+
+It is infeasible to obtain an analytical expression for the posterior because of the integral in the denominator. Numerically, there are three options. 
+
+\subsection{Gaussian Process}
+
+And for Ian
+
+
+
+
+
+
+\section{Experiments and Results}
+Reference the project guide
+
+\subsection{Naive Bayes}
+
+The Titanic dataset, supplied by Kaggle, came originally with with ten features and corresponding classes. Two of these features, include the name and the ticket id, would be useless for Naive Bayes as they can not be represented as numbers so they were removed from the dataset. Of the remaining features, The passenger sex and embankment location were strings. A natural fix to this issue was to represent the sex as a binary variable, 0 representing male and 1 representing female. The three embarked location variables, Cherbourg, Queenstown, and Southamton, were changed to 1, 2, and 3 respectively. All missing data was denoted with a -1 for computational ease of excluding features.
+
+This data was complied and placed in an array, represented the table 1 below, where \textbf{t} is an indicator variable, 1 implies survived, 0 implies not, and the features $x_d$ represent Passenger class, sex, age, SbSp, Parch, Fare, and embarked location respectivley
+%look up and define what SibSp is
+
+\begin{table}[h]
+\caption{Classification accuracies for naive Bayes and flexible 
+Bayes on various data sets.}
+\label{sample-table}
+\vskip 0.15in
+\begin{center}
+\begin{small}
+\begin{sc}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\abovespace\belowspace
+\textbf{t} & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ & $x_7$ \\
+\hline
+\abovespace
+0 & 3 & 0 & 22 & 0 & 0 & 7.25 & 0 \\
+1 & 1 & 1 & 38 & 1 & 1 & 71.28 & 2 \\
+1 & 3 & 0 & -1 & 4 & 3 & 7.93 & 0 \\
+0 & 2 & 0 & 54 & 1 & 5 & 30.07 & 0 \\
+0 & 2 & 1 & -1 & 2 & 4 & 263 & 1 \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+1 & 3 & 0 & 84 & 3 & 1 & 9 & 2 \\
+
+\hline
+\end{tabular}
+\end{sc}
+\end{small}
+\end{center}
+\vskip -0.1in
+\end{table}
+
+Using this classification method we tested two potential methods of Naive Bayes. Here we have a mixture of discrete and continuous variables, meaning we could either represent all variables as continuous, or recognize we have both discrete and continuous variables. 
+
+\subsubsection{Implementation: Purely Continuous}
+The continuous representation of of our data assumes all features in our data set, refer to table 1, can be represented by a real number. This assumption allows for a marginally faster implementation of Naive Bayes as the class conditional distribution may easily be represented by a Gaussian distribution, where the mean is the average value of every respective feature and the variance is the variance of all of these features. 
+%explain that mu and sigma are MLE approximations
+
+For our implementation of Naive Bayes, this leaves us the modified version of equation 2
+
+\begin{equation}
+    p(\textbf{x}_{n}|t_{n}=c,\textbf{X},\textbf{t})= \prod_{d=1}^D \mathcal{N}(x_{nd}|\mu_d, \sigma_d)
+\end{equation}
+
+which can easily be evaluated. This then leaves the class prior, our second term in the numerator of equation 1, which in practice is generally left as the MLE solution 
+
+\begin{equation}
+P(T_{n}=c|\textbf{X},\textbf{t})= \frac{n_c}{N}
+\end{equation}
+
+where $n_c$ is the number of elements in class c. The combination of equations 3 and 4 allow for the use of our Naive Bayes model defined in equation 1.
+
+\subsubsection{Results: Purely Continuous}
+
+The results of the MLE approximation for the parameters $\mu$, $\sigma$, and $P(t_n=c|\textbf{X},\textbf{t}$ are described below in table 2
+
+\begin{table}[h]
+\caption{Classification accuracies for naive Bayes and flexible 
+Bayes on various data sets.}
+\label{sample-table}
+\vskip 0.15in
+\begin{center}
+\begin{small}
+\begin{sc}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\abovespace\belowspace
+  & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ & $x_7$ \\
+\hline
+\abovespace
+$\mu_0$ & 2.51 & 0.16 & 23.63 & 0.65 & 0.35 & 24.24 & 1.30 \\
+$\mu_1$ & 2.09 & 0.74 & 21.50 & 0.49 & 0.45 & 45.04 & 1.49 \\
+$\sigma_0$ & ? & ? & ? & ? & ? & ? & ? \\
+$\sigma_1$ & ? & ? & ? & ? & ? & ? & ? \\
+$P(t_n=0)$  & 3 & 0 & -1 & 4 & 3 & 7.93 & 0 \\
+$P(t_n=1)$ & 2 & 0 & 54 & 1 & 5 & 30.07 & 0 \\
+
+\hline
+\end{tabular}
+\end{sc}
+\end{small}
+\end{center}
+\vskip -0.1in
+\end{table}
+
+
+
+\subsubsection{Implementation: Continuous and Discrete}
+
+
+
+\subsection{Logistic regression}
+
+This is for Hillary
+
+\subsection{Gaussian Process}
+
+And for Ian
+
+
+
+\section{Discussion and Extensions}
+Reference the project guide 
+
+
+
+
+
+
+\bibliography{example_paper}
+\bibliographystyle{icml2013}
+
+There is a pre-imported references section which we will need to change to what our references our (like the books we used to understand these algorithms or lectures)
+
+\end{document} 
+
+
+% This document was modified from the file originally made available by
+% Pat Langley and Andrea Danyluk for ICML-2K. This version was
+% created by Lise Getoor and Tobias Scheffer, it was slightly modified  
+% from the 2010 version by Thorsten Joachims & Johannes Fuernkranz, 
+% slightly modified from the 2009 version by Kiri Wagstaff and 
+% Sam Roweis's 2008 version, which is slightly modified from 
+% Prasad Tadepalli's 2007 version which is a lightly 
+% changed version of the previous year's version by Andrew Moore, 
+% which was in turn edited from those of Kristian Kersting and 
+% Codrina Lauth. Alex Smola contributed to the algorithmic style files.  
+% * <dmukasa@oberlin.edu> 2017-05-06T15:10:26.661Z:
+%
+% ^.
